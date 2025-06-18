@@ -1,163 +1,195 @@
 # School Assignment Portal
 
-A comprehensive full-stack school management system with role-based dashboards for administrators, teachers, and students.
+A full-stack school management and assignment portal with role-based dashboards for administrators, teachers, and students.
+
+---
 
 ## Features
 
-- **Role-based Authentication**: Admin, Teacher, and Student dashboards
-- **Subject-aware Assignment Management**: Students select subjects before accessing assignments
-- **Auto-grading System**: MCQ assignments are automatically graded
-- **Manual Grading**: Teachers can manually grade written assignments
-- **Class Management**: Organize users by classes and grade levels
-- **Performance Tracking**: Students can view their scores and progress
+- **Role-based Authentication**: Separate dashboards and permissions for Admin, Teacher, and Student.
+- **Class & Subject Management**: Admins can create/manage classes and subjects.
+- **Assignment Management**: Admins and teachers can create MCQ or written assignments for specific classes/subjects.
+- **Submission & Grading**: Students submit assignments; MCQs are auto-graded, written assignments are graded by teachers.
+- **Performance Tracking**: Students and teachers can view scores and progress.
+- **Modern UI**: Built with React, Tailwind CSS, and Lucide icons.
+
+---
 
 ## Tech Stack
 
-- **Frontend**: React.js with TypeScript, Tailwind CSS, React Router
-- **Backend**: Node.js with Express.js
-- **Database**: PostgreSQL
-- **Authentication**: JWT with role-based access control
+- **Frontend**: React + TypeScript, Vite, Tailwind CSS, React Router
+- **Backend**: Node.js, Express.js
+- **Database**: MySQL (schema and migrations in `/server/database/`)
+- **Authentication**: JWT (role-based)
+- **Dev Tools**: ESLint, Nodemon, Concurrently
+
+---
 
 ## Prerequisites
 
-- Node.js (v16 or higher)
-- PostgreSQL (v12 or higher)
-- npm or yarn
+- Node.js (v16+)
+- MySQL (v8+)
+- npm
+
+---
 
 ## Installation & Setup
 
-### 1. Install PostgreSQL
+### 1. Install MySQL
 
-**Windows**: Download from https://www.postgresql.org/download/windows/
-**macOS**: `brew install postgresql && brew services start postgresql`
-**Linux**: `sudo apt install postgresql postgresql-contrib`
+- **Windows**: [Download here](https://dev.mysql.com/downloads/installer/)
+- **macOS**: `brew install mysql && brew services start mysql`
+- **Linux**: `sudo apt install mysql-server`
 
 ### 2. Clone and Install Dependencies
 
-```bash
+```sh
 git clone <repository-url>
-cd school-assignment-portal
+cd school-portal
 npm install
 ```
 
 ### 3. Database Setup
 
-1. **Update Database Password**: Edit `setup-database.js` and change `your_postgres_password` to your actual PostgreSQL password.
+1. **Configure MySQL Password**:  
+   Edit `/server/database/init.js` and set your MySQL root password if needed.
 
-2. **Run Database Setup**:
-```bash
-node setup-database.js
-```
+2. **Create Database and Tables**:  
+   You can use the provided SQL scripts:
 
-This will:
-- Create the `school_portal` database
-- Create a `school_user` with appropriate permissions
-- Set up all tables and relationships
-- Insert sample data for testing
+   - `server/database/create_mysql_database.sql` (create DB and tables)
+   - `server/database/schema.sql` (table structure)
+   - `server/database/seed.sql` (sample data)
+
+   Or, simply start the backend server and it will initialize the schema and seed data automatically.
 
 ### 4. Environment Configuration
 
-The `.env` file is already configured with the database settings. Update if needed:
+Update the `.env` file if needed (default values are provided):
 
 ```env
 DB_HOST=localhost
-DB_PORT=5432
+DB_PORT=3306
 DB_NAME=school_portal
-DB_USER=school_user
-DB_PASSWORD=school_password123
+DB_USER=root
+DB_PASSWORD=your_mysql_password
 JWT_SECRET=school_portal_secret_key_change_in_production
 PORT=5000
 ```
 
 ### 5. Start the Application
 
-```bash
+```sh
 npm run dev
 ```
 
-This starts both the frontend (port 5173) and backend (port 5000) servers.
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:5000/api
+
+---
+
+## Project Structure
+
+```
+.
+├── server/              # Express backend (routes, database, middleware)
+│   ├── routes/
+│   ├── database/
+│   └── middleware/
+├── src/                 # React frontend (components, pages, utils)
+│   ├── components/
+│   ├── contexts/
+│   ├── pages/
+│   └── utils/
+├── package.json         # Scripts & dependencies
+└── ...
+```
+
+---
 
 ## Test Accounts
 
-After running the database setup, you can log in with these accounts:
+After running the setup, you can log in with:
 
 - **Admin**: admin@school.com / password123
 - **Teacher**: john.teacher@school.com / password123
 - **Student**: alice.student@school.com / password123
 
-## Database Schema
-
-The system includes these main tables:
-- `users` - All system users with roles
-- `classes` - Grade levels and class organization
-- `subjects` - Subjects per class
-- `students` - Student-specific data and class assignments
-- `teachers` - Teacher-specific data and subject assignments
-- `assignments` - Assignment details and deadlines
-- `questions` - Individual questions for assignments
-- `submissions` - Student assignment submissions
-- `marks` - Individual question scores
+---
 
 ## Usage
 
 ### Admin Dashboard
 - Manage users (create, edit, delete)
-- Create and assign classes and subjects
-- Create assignments for specific classes and subjects
+- Manage classes and subjects
+- Create assignments for classes/subjects
 - View all submissions and performance data
-- Manage email whitelist for access control
 
 ### Teacher Dashboard
 - View assigned classes and subjects
-- See student lists for assigned classes
-- Review and grade student submissions
-- View class performance metrics
-- Auto-graded MCQ results available immediately
+- See student lists
+- Review and grade written submissions
+- View class performance
+- MCQ assignments are auto-graded
 
 ### Student Dashboard
-- Select subjects from assigned class
-- View and complete assignments per subject
-- Submit MCQ and written assignments
-- Track personal performance and scores
-- View submission history
+- View assigned subjects
+- Complete and submit assignments
+- Track scores and submission history
+
+---
+
+## Database Schema
+
+Main tables:
+
+- `users` — All users (admin, teacher, student)
+- `classes` — School classes/grades
+- `subjects` — Subjects per class
+- `students` — Student records
+- `teachers` — Teacher records
+- `assignments` — Assignment details
+- `questions` — Assignment questions (MCQ/written)
+- `submissions` — Student submissions
+- `marks` — Per-question marks
+
+See `/server/database/` for full schema and sample data.
+
+---
 
 ## Troubleshooting
 
-### Database Connection Issues
-1. Ensure PostgreSQL is running: `sudo systemctl status postgresql` (Linux) or check Services (Windows)
-2. Verify connection: `psql -U postgres -h localhost`
-3. Check if database exists: `psql -U school_user -d school_portal -h localhost`
+### Database Issues
 
-### Common Setup Problems
-- **Permission denied**: Make sure the `school_user` has proper database permissions
-- **Port conflicts**: Change the PORT in `.env` if 5000 is already in use
-- **Module not found**: Run `npm install` to ensure all dependencies are installed
+- Ensure MySQL is running.
+- Check credentials in `.env` and `/server/database/init.js`.
+- To reset the database, you can drop and recreate it using the provided SQL scripts.
 
-### Reset Database
-To start fresh, you can drop and recreate the database:
-```sql
-DROP DATABASE IF EXISTS school_portal;
-DROP USER IF EXISTS school_user;
-```
-Then run `node setup-database.js` again.
+### Common Problems
+
+- **Port conflicts**: Change `PORT` in `.env` if needed.
+- **Module not found**: Run `npm install`.
+- **Permission denied**: Ensure your MySQL user has DB privileges.
+
+---
 
 ## Development
 
-The project uses:
-- **Concurrently** to run frontend and backend simultaneously
-- **Nodemon** for backend auto-restart on changes
-- **Vite** for fast frontend development
-- **TypeScript** for type safety
-- **Tailwind CSS** for styling
+- **Run both servers:** `npm run dev`
+- **Lint code:** `npm run lint`
+- **Build frontend:** `npm run build`
+
+---
 
 ## Production Deployment
 
-1. Update environment variables for production
-2. Change JWT_SECRET to a secure random string
-3. Configure PostgreSQL for production use
-4. Build the frontend: `npm run build`
-5. Use a process manager like PM2 for the backend
+1. Update `.env` for production.
+2. Change `JWT_SECRET` to a secure value.
+3. Build frontend: `npm run build`
+4. Use a process manager (e.g., PM2) for the backend.
+
+---
 
 ## License
 
-This project is for educational purposes.
+This project is for educational purposes only.
