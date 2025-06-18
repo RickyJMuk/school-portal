@@ -47,7 +47,7 @@ router.get('/dashboard', async (req, res) => {
       FROM assignments a
       JOIN subjects subj ON a.subject_id = subj.id
       LEFT JOIN submissions sub ON a.id = sub.assignment_id AND sub.student_id = ?
-      WHERE a.class_id = ? AND sub.id IS NULL AND a.deadline > datetime('now')
+      WHERE a.class_id = ? AND sub.id IS NULL AND a.deadline > NOW()
       ORDER BY a.deadline ASC
     `, [student.id, student.class_id]);
 

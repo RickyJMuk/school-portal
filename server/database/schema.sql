@@ -47,6 +47,16 @@
 --   CONSTRAINT fk_teachers_class FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE
 -- );
 
+-- -- Teacher-Subjects mapping table (for many-to-many relationship)
+CREATE TABLE IF NOT EXISTS teacher_subjects (
+  id CHAR(36) PRIMARY KEY,
+  teacher_id CHAR(36),
+  subject_id CHAR(36),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_teacher FOREIGN KEY (teacher_id) REFERENCES teachers(id) ON DELETE CASCADE,
+  CONSTRAINT fk_subject FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
+);
+
 -- -- Assignments table
 -- CREATE TABLE IF NOT EXISTS assignments (
 --   id CHAR(36) PRIMARY KEY,
