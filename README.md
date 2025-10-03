@@ -19,7 +19,7 @@ A full-stack school management and assignment portal with role-based dashboards 
 
 - **Frontend**: React + TypeScript, Vite, Tailwind CSS, React Router
 - **Backend**: Node.js, Express.js
-- **Database**: MySQL (schema and migrations in `/server/database/`)
+- **Database**: MySQL
 - **Authentication**: JWT (role-based)
 - **Dev Tools**: ESLint, Nodemon, Concurrently
 
@@ -37,9 +37,6 @@ A full-stack school management and assignment portal with role-based dashboards 
 
 ### 1. Install MySQL
 
-- **Windows**: [Download here](https://dev.mysql.com/downloads/installer/)
-- **macOS**: `brew install mysql && brew services start mysql`
-- **Linux**: `sudo apt install mysql-server`
 
 ### 2. Clone and Install Dependencies
 
